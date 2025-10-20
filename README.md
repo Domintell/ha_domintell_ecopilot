@@ -61,9 +61,9 @@ During installation, you will be prompted for:
 
 This integration supports the following EcoPilot devices:
 
-- **tankSense:**
+- **tankSense:** Sensor that determines the level and volume of liquid in a tank (supports various geometric shapes).
 
-- **ecoDrive-P1:**
+- **ecoDrive-P1:** Energy optimization module that manages surplus renewable electricity, utilizing it for specific loads, such as water heating.
 
 - **Comming soon:**
   - ecoP1
