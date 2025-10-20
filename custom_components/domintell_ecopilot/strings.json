@@ -1,0 +1,310 @@
+{
+  "title": "Domintell EcoPilot",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configure device",
+        "description": "Enter The hostname or IP address of your EcoPilot device to integrate with Home Assistant.",
+        "data": {
+          "host": "[%key:common::config_flow::data::host%]"
+        },
+        "data_description": {
+          "host": "The hostname or IP address of your EcoPilot device."
+        }
+      },
+      "discovery_confirm": {
+        "title": "Confirm",
+        "description": "Do you want to set up {product_model} ({serial_number}) at {host}?"
+      },
+      "reauth_confirm_update_token": {
+        "title": "Re-authenticate",
+        "description": "[%key:component::domintell_ecopilot::config::step::authorize::description%]"
+      },
+      "authorize": {
+        "title": "Authorize",
+        "description": "Press the button on the EcoPilot device for two seconds, then select the button below."
+      },
+      "reconfigure": {
+        "description": "Update configuration for {title}.",
+        "data": {
+          "host": "[%key:common::config_flow::data::host%]"
+        },
+        "data_description": {
+          "host": "[%key:component::domintell_ecopilot::config::step::user::data_description::host%]"
+        }
+      },
+      "tank_sensor_config": {
+        "title": "Tank sensor configuration",
+        "data": {
+          "distance_offset": "Distance offset"
+        },
+        "data_description": {
+          "distance_offset": "Distance offset in cm."
+        }
+      },
+      "tank_config": {
+        "title": "Tank configuration",
+        "data": {
+          "tank_shape": "Tank shape"
+        },
+        "data_description": {
+          "tank_shape": "Select the tank shape."
+        }
+      },
+      "linear_tank": {
+        "title": "Tank dimensions",
+        "data": {
+          "height_max": "Height max",
+          "tank_capacity": "Tank capacity"
+        },
+        "data_description": {
+          "height_max": "Maximum liquid height in cm.",
+          "tank_capacity": "Tank capacity in L"
+        }
+      },
+      "rectangular_tank": {
+        "title": "Tank dimensions",
+        "data": {
+          "tank_length": "length",
+          "tank_width": "width",
+          "tank_height": "height"
+        },
+        "data_description": {
+          "tank_length": "length in cm",
+          "tank_width": "width in cm",
+          "tank_height": "height in cm"
+        }
+      },
+      "cylindrical_tank": {
+        "title": "Tank dimensions",
+        "data": {
+          "tank_cylinder_radius": "cylinder radius",
+          "tank_cylinder_height": "cylinder height"
+        },
+        "data_description": {
+          "tank_cylinder_radius": "cylinder radius in cm",
+          "tank_cylinder_height": "cylinder height in cm"
+        }
+      }
+    },
+    "error": {
+      "network_error": "Device unreachable, make sure that you have entered the correct hostname or IP address and that the device is available in your network",
+      "authorization_failed": "Failed to authorize, make sure to press the button of the device within 30 seconds"
+    },
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]",
+      "invalid_discovery_parameters": "Invalid discovery parameters",
+      "device_not_supported": "This device is not supported",
+      "unknown_error": "[%key:common::config_flow::error::unknown%]",
+      "unsupported_api_version": "Detected unsupported API version",
+      "reauth_successful": "Authorization successful",
+      "reconfigure_successful": "[%key:common::config_flow::abort::reconfigure_successful%]",
+      "wrong_device": "The configured device is not the same found on this hostname or IP address."
+    }
+  },
+  "entity": {
+    "update": {
+      "firmware": {
+        "name": "Firmware"
+      }
+    },
+    "switch": {
+      "power_on": {
+        "name": "Power On"
+      },
+      "switch_lock": {
+        "name": "Switch lock"
+      },
+      "restore_state": {
+        "name": "Restore state"
+      },
+      "relay1": {
+        "name": "Relay 1"
+      },
+      "relay2": {
+        "name": "Relay 2"
+      }
+    },
+    "number": {
+      "overload_protection": {
+        "name": "Overload protection"
+      },
+      "pwm_state": {
+        "name": "PWM"
+      },
+      "max_temperature": {
+        "name": "Temperature max."
+      },
+      "max_peak_power": {
+        "name": "Power peak max."
+      },
+      "current_heating_oil_volume": {
+        "name": "Current heating oil volume"
+      },
+      "heating_oil_energy_density": {
+        "name": "Heating oil energy density"
+      },
+      "heating_oil_consumption_rate": {
+        "name": "Heating oil consumption rate"
+      }
+    },
+    "select": {
+      "mode": {
+        "name": "Mode"
+      }
+    },
+    "binary_sensor": {
+      "burner_state": {
+        "name": "Burner state"
+      }
+    },
+    "sensor": {
+      "wifi_ssid": {
+        "name": "Wi-Fi SSID"
+      },
+      "wifi_strength": {
+        "name": "Wi-Fi strength"
+      },
+      "dsmr_version": {
+        "name": "DSMR version"
+      },
+      "meter_model": {
+        "name": "Meter model"
+      },
+      "unique_id": {
+        "name": "Meter Id"
+      },
+      "tariff_indicator": {
+        "name": "Tariff"
+      },
+      "energy": {
+        "name": "Energy"
+      },
+      "energy_import": {
+        "name": "Energy import"
+      },
+      "total_energy_import_tariff": {
+        "name": "Energy import tariff {tariff}"
+      },
+      "energy_export": {
+        "name": "Energy export"
+      },
+      "total_energy_export_tariff": {
+        "name": "Energy export tariff {tariff}"
+      },
+      "power": {
+        "name": "Power"
+      },
+      "power_phase": {
+        "name": "Power phase {phase}"
+      },
+      "voltage": {
+        "name": "Voltage"
+      },
+      "voltage_phase": {
+        "name": "Voltage phase {phase}"
+      },
+      "current": {
+        "name": "Current"
+      },
+      "current_phase": {
+        "name": "Current phase {phase}"
+      },
+      "frequency": {
+        "name": "Frequency"
+      },
+      "voltage_sag_phase": {
+        "name": "Voltage sags detected phase {phase}"
+      },
+      "voltage_swell_phase": {
+        "name": "Voltage swells detected phase {phase}"
+      },
+      "any_power_fail_count": {
+        "name": "Power failures detected"
+      },
+      "long_power_fail_count": {
+        "name": "Long power failures detected"
+      },
+      "water_flow_rate": {
+        "name": "Water flow rate"
+      },
+      "water_consumed": {
+        "name": "Water consumed"
+      },
+      "heating_oil_consumed": {
+        "name": "Heating oil consumed"
+      },
+      "remaining_heating_oil_level": {
+        "name": "Remaining heating oil level"
+      },
+      "distance": {
+        "name": "Distance"
+      },
+      "level": {
+        "name": "Level"
+      },
+      "volume": {
+        "name": "Volume"
+      },
+      "srssi": {
+        "name": "Sonic RSSI"
+      },
+      "src": {
+        "name": "Sonic Results Code"
+      },
+      "temperature": {
+        "name": "Temperature"
+      },
+      "internal_temperature": {
+        "name": "Temperature"
+      },
+      "external_temperature": {
+        "name": "External temperature"
+      },
+      "battery_level": {
+        "name": "Battery level"
+      },
+      "battery_voltage": {
+        "name": "Battery voltage"
+      },
+      "uptime": {
+        "name": "Uptime"
+      },
+      "distance_offset": {
+        "name": "Distance offset"
+      },
+      "tank_shape": {
+        "name": "Tank shape"
+      },
+      "height_max": {
+        "name": "Height max."
+      },
+      "tank_capacity": {
+        "name": "Tank capacity"
+      },
+      "tank_length": {
+        "name": "Tank length"
+      },
+      "tank_width": {
+        "name": "Tank width"
+      },
+      "tank_height": {
+        "name": "Tank height"
+      },
+      "tank_cylinder_radius": {
+        "name": "Tank cylinder radius"
+      },
+      "tank_cylinder_height": {
+        "name": "Tank cylinder height"
+      }
+    }
+  },
+  "exceptions": {
+    "api_unauthorized": {
+      "message": "The local API is unauthorized. Restore API access by following the instructions in the repair issue."
+    },
+    "communication_error": {
+      "message": "An error occurred while communicating with your EcoPilot device"
+    }
+  }
+}

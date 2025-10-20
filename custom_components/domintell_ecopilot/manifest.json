@@ -1,0 +1,16 @@
+{
+  "domain": "domintell_ecopilot",
+  "name": "EcoPilot",
+  "codeowners": ["@Domintell, @domintellpublic", "@sgonnella"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/Domintell/hacs_domintell_ecopilot#domintell-ecopilot-integration-for-home-assistant",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/Domintell/hacs_domintell_ecopilot/issues",
+  "loggers": ["ecopilot"],
+  "quality_scale": "no_score",
+  "requirements": [],
+  "version": "0.5.0",
+  "zeroconf": ["_ecopilot._tcp.local."]
+}

@@ -1,0 +1,119 @@
+{
+  "entity": {
+    "update": {
+      "firmware": {
+        "default": "mdi:package"
+      }
+    },
+    "sensor": {
+      "wifi_ssid": {
+        "default": "mdi:wifi"
+      },
+      "wifi_strength": {
+        "default": "mdi:wifi"
+      },
+      "dsmr_version": {
+        "default": "mdi:counter"
+      },
+      "meter_model": {
+        "default": "mdi:gauge"
+      },
+      "unique_id": {
+        "default": "mdi:alphabetical-variant"
+      },
+      "tariff_indicator": {
+        "default": "mdi:calendar-clock"
+      },
+      "voltage_sag_l1": {
+        "default": "mdi:alert"
+      },
+      "voltage_sag_l2": {
+        "default": "mdi:alert"
+      },
+      "voltage_sag_l3": {
+        "default": "mdi:alert"
+      },
+      "voltage_swell_l1": {
+        "default": "mdi:alert"
+      },
+      "voltage_swell_l2": {
+        "default": "mdi:alert"
+      },
+      "voltage_swell_l3": {
+        "default": "mdi:alert"
+      },
+      "any_power_fail_count": {
+        "default": "mdi:transmission-tower-off"
+      },
+      "long_power_fail_count": {
+        "default": "mdi:transmission-tower-off"
+      },
+      "water_flow_rate": {
+        "default": "mdi:water"
+      },
+      "water_consumed": {
+        "default": "mdi:gauge"
+      },
+      "distance": {
+        "default": "mdi:arrow-collapse-down"
+      },
+      "level": {
+        "default": "mdi:wave-arrow-up"
+      },
+      "srssi": {
+        "default": "mdi:signal"
+      },
+      "src": {
+        "default": "mdi:eye"
+      },
+      "height_max": {
+        "default": "mdi:arrow-collapse-up"
+      },
+      "distance_offset": {
+        "default": "mdi:arrow-expand-vertical"
+      },
+      "tank_width": {
+        "default": "mdi:arrow-top-left-bottom-right"
+      },
+      "tank_height": {
+        "default": "mdi:arrow-up-down"
+      },
+      "tank_cylinder_radius": {
+        "default": "mdi:radius"
+      }
+    },
+    "binary_sensor": {
+      "burner_state": {
+        "default": "mdi:fire",
+        "state": {
+          "off": "mdi:fire-off"
+        }
+      }
+    },
+    "switch": {
+      "switch_lock": {
+        "default": "mdi:lock",
+        "state": {
+          "off": "mdi:lock-open"
+        }
+      }
+    },
+    "number": {
+      "pwm_state": {
+        "default": "mdi:square-wave"
+      },
+      "max_temperature": {
+        "default": "mdi:thermometer-water"
+      },
+      "max_peak_power": {
+        "default": "mdi:flash"
+      },
+      "heating_oil_energy_density": {
+        "default": "mdi:barrel"
+      },
+      "heating_oil_consumption_rate": {
+        "default": "mdi:speedometer"
+      }
+    }
+  }
+}

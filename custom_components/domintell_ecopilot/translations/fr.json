@@ -1,0 +1,310 @@
+{
+  "title": "Domintell EcoPilot",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurer l'appareil",
+        "description": "Entrez le nom d'hôte ou l'adresse IP de votre appareil EcoPilot pour l'intégrer à Home Assistant.",
+        "data": {
+          "host": "host"
+        },
+        "data_description": {
+          "host": "Le nom d'hôte ou l'adresse IP de votre appareil EcoPilot."
+        }
+      },
+      "discovery_confirm": {
+        "title": "Confirmer",
+        "description": "Voulez-vous configurer {product_model} ({serial_number}) sur {host}?"
+      },
+      "reauth_confirm_update_token": {
+        "title": "Ré-authentifier",
+        "description": "Appuyez sur le bouton de l'appareil EcoPilot pendant deux secondes, puis sélectionnez le bouton ci-dessous"
+      },
+      "authorize": {
+        "title": "Autoriser",
+        "description": "Appuyez sur le bouton de l'appareil EcoPilot pendant deux secondes, puis sélectionnez le bouton ci-dessous."
+      },
+      "reconfigure": {
+        "description": "Mettre à jour la configuration pour {title}.",
+        "data": {
+          "host": "host"
+        },
+        "data_description": {
+          "host": "Le nom d'hôte ou l'adresse IP de votre pont Domintell"
+        }
+      },
+      "tank_sensor_config": {
+        "title": "Configuration du capteur",
+        "data": {
+          "distance_offset": "Décalage de distance"
+        },
+        "data_description": {
+          "distance_offset": "Décalage de distance en cm."
+        }
+      },
+      "tank_config": {
+        "title": "Configuration de la cuve",
+        "data": {
+          "tank_shape": "Forme de la cuve"
+        },
+        "data_description": {
+          "tank_shape": "Sélectionnez la forme de la cuve."
+        }
+      },
+      "linear_tank": {
+        "title": "Dimensions de la cuve",
+        "data": {
+          "height_max": "Hauteur max",
+          "tank_capacity": "Capacité"
+        },
+        "data_description": {
+          "height_max": "Hauteur maximale de liquide en cm.",
+          "tank_capacity": "Capacité de la cuve en L."
+        }
+      },
+      "rectangular_tank": {
+        "title": "Dimensions de la cuve",
+        "data": {
+          "tank_length": "longueur",
+          "tank_width": "largeur",
+          "tank_height": "hauteur"
+        },
+        "data_description": {
+          "tank_length": "longueur en cm",
+          "tank_width": "largeur en cm",
+          "tank_height": "hauteur en cm"
+        }
+      },
+      "cylindrical_tank": {
+        "title": "Dimensions de la cuve",
+        "data": {
+          "tank_cylinder_radius": "rayon du cylindre",
+          "tank_cylinder_height": "hauteur du cylindre"
+        },
+        "data_description": {
+          "tank_cylinder_radius": "rayon du cylindre en cm",
+          "tank_cylinder_height": "hauteur du cylindre en cm"
+        }
+      }
+    },
+    "error": {
+      "network_error": "Appareil inaccessible, assurez-vous que vous avez saisi le bon nom d'hôte ou la bonne adresse IP et que l'appareil est disponible sur votre réseau",
+      "authorization_failed": "Échec de l'autorisation, assurez-vous d'appuyer sur le bouton de l'appareil dans les 30 secondes"
+    },
+    "abort": {
+      "already_configured": "L'appareil est déjà configuré",
+      "invalid_discovery_parameters": "Paramètres de découverte non valides",
+      "device_not_supported": "Cet appareil n'est pas pris en charge",
+      "unknown_error": "Erreur inattendue",
+      "unsupported_api_version": "Version d'API non prise en charge détectée",
+      "reauth_successful": "Autorisation réussie",
+      "reconfigure_successful": "Reconfiguration réussie",
+      "wrong_device": "L'appareil configuré n'est pas le même que celui trouvé sur ce nom d'hôte ou cette adresse IP."
+    }
+  },
+  "entity": {
+    "update": {
+      "firmware": {
+        "name": "Micrologiciel"
+      }
+    },
+    "switch": {
+      "power_on": {
+        "name": "Allumer"
+      },
+      "switch_lock": {
+        "name": "Verrouillage de la prise"
+      },
+      "restore_state": {
+        "name": "Restaurer l'état"
+      },
+      "relay1": {
+        "name": "Relais 1"
+      },
+      "relay2": {
+        "name": "Relais 2"
+      }
+    },
+    "number": {
+      "overload_protection": {
+        "name": "Protection surcharges"
+      },
+      "pwm_state": {
+        "name": "PWM"
+      },
+      "max_temperature": {
+        "name": "Température max."
+      },
+      "max_peak_power": {
+        "name": "Puissance crête max."
+      },
+      "current_heating_oil_volume": {
+        "name": "Volume actuel de mazout"
+      },
+      "heating_oil_energy_density": {
+        "name": "Densité énergétique du mazout"
+      },
+      "heating_oil_consumption_rate": {
+        "name": "Taux de consommation de mazout"
+      }
+    },
+    "select": {
+      "mode": {
+        "name": "Mode"
+      }
+    },
+    "binary_sensor": {
+      "burner_state": {
+        "name": "État du brûleur"
+      }
+    },
+    "sensor": {
+      "wifi_ssid": {
+        "name": "Wi-Fi SSID"
+      },
+      "wifi_strength": {
+        "name": "Wi-Fi puissance"
+      },
+      "dsmr_version": {
+        "name": "DSMR version"
+      },
+      "meter_model": {
+        "name": "Modèle de compteur"
+      },
+      "unique_id": {
+        "name": "Identifiant compteur"
+      },
+      "tariff_indicator": {
+        "name": "Tarif"
+      },
+      "energy": {
+        "name": "Energie"
+      },
+      "energy_import": {
+        "name": "Energie importée"
+      },
+      "total_energy_import_tariff": {
+        "name": "Energie importée tariff {tariff}"
+      },
+      "energy_export": {
+        "name": "Energie exportée"
+      },
+      "total_energy_export_tariff": {
+        "name": "Energie exportée tariff {tariff}"
+      },
+      "power": {
+        "name": "Puissance"
+      },
+      "power_phase": {
+        "name": "Puissance phase {phase}"
+      },
+      "voltage": {
+        "name": "Tension"
+      },
+      "voltage_phase": {
+        "name": "Tension phase {phase}"
+      },
+      "current": {
+        "name": "Courrant"
+      },
+      "current_phase": {
+        "name": "Courrant phase {phase}"
+      },
+      "frequency": {
+        "name": "Fréquence"
+      },
+      "voltage_sag_phase": {
+        "name": "Soustensions détectées phase {phase}"
+      },
+      "voltage_swell_phase": {
+        "name": "Surtensions détectées phase {phase}"
+      },
+      "any_power_fail_count": {
+        "name": "Pannes de courant détectées"
+      },
+      "long_power_fail_count": {
+        "name": "Pannes de courant prolongées détectées"
+      },
+      "water_flow_rate": {
+        "name": "Débit d'eau"
+      },
+      "water_consumed": {
+        "name": "Eau consommée"
+      },
+      "heating_oil_consumed": {
+        "name": "Mazout consommé"
+      },
+      "remaining_heating_oil_level": {
+        "name": "Niveau de mazout restant"
+      },
+      "distance": {
+        "name": "Distance"
+      },
+      "level": {
+        "name": "Niveau"
+      },
+      "volume": {
+        "name": "Volume"
+      },
+      "srssi": {
+        "name": "Sonic RSSI"
+      },
+      "src": {
+        "name": "Sonic Results Code"
+      },
+      "temperature": {
+        "name": "Température"
+      },
+      "internal_temperature": {
+        "name": "Température"
+      },
+      "external_temperature": {
+        "name": "Température externe"
+      },
+      "battery_level": {
+        "name": "Niveau batterie"
+      },
+      "battery_voltage": {
+        "name": "Tension batterie"
+      },
+      "uptime": {
+        "name": "Uptime"
+      },
+      "distance_offset": {
+        "name": "Décalage de distance"
+      },
+      "tank_shape": {
+        "name": "Forme cuve"
+      },
+      "height_max": {
+        "name": "Hauteur max."
+      },
+      "tank_capacity": {
+        "name": "Capacité cuve"
+      },
+      "tank_length": {
+        "name": "Longueur cuve"
+      },
+      "tank_width": {
+        "name": "Largeur cuve"
+      },
+      "tank_height": {
+        "name": "Hauteur cuve"
+      },
+      "tank_cylinder_radius": {
+        "name": "Rayon du cylindre de la cuve"
+      },
+      "tank_cylinder_height": {
+        "name": "Hauteur du cylindre de la cuve"
+      }
+    }
+  },
+  "exceptions": {
+    "api_unauthorized": {
+      "message": "L'API locale n'est pas autorisée. Restaurez l'accès à l'API en suivant les instructions de réparation."
+    },
+    "communication_error": {
+      "message": "Une erreur s'est produite lors de la communication avec votre appareil EcoPilot"
+    }
+  }
+}
