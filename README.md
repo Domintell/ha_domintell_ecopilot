@@ -55,6 +55,7 @@ If it wasn’t discovered automatically, don’t worry! You can set up a manual 
 During installation, you will be prompted for:
 
 - **Host:** The IP address or hostname of your Domintell EcoPilot device.
+- **Other:** Depends on the type of device (Tank dimensions, offset, ...).
 
 ## Supported Devices
 
@@ -75,7 +76,14 @@ The identify button can be pressed to let the status light blink for a few secon
 
 ## Known limitations
 
-- **AAABBBCC:** TODO
+### tankSense
+
+Currently, the tank shape configuration for the **tankSense** device is limited. Only the following tank shapes are supported by the integration:
+
+- **Linear**
+- **Rectangular**
+- **Horizontal Cylindrical**
+- **Vertical Cylindrical**
 
 ## Troubleshooting
 
