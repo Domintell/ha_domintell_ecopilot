@@ -86,6 +86,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: EcoPilotConfigEntry) -> 
 
     entry.runtime_data = coordinator
 
+    if DOMAIN not in hass.data:
+        hass.data[DOMAIN] = {}
+
+    hass.data[DOMAIN][entry.entry_id] = {
+        "coordinator": coordinator,
+    }
+
     # Abort reauth config flow if active
     for progress_flow in hass.config_entries.flow.async_progress_by_handler(DOMAIN):
         if (
@@ -104,15 +111,24 @@ async def async_setup_entry(hass: HomeAssistant, entry: EcoPilotConfigEntry) -> 
 async def async_unload_entry(hass: HomeAssistant, entry: EcoPilotConfigEntry) -> bool:
     """Unload a config entry."""
 
-    coordinator = entry.runtime_data
-    uuid = await instance_id.async_get(hass)
-
-    try:
-        # Remove token from device
-        await coordinator.api.delete_token(f"home-assistant#{uuid[:6]}")
-    except Exception as ex:
-        LOGGER.warning("Error deleting token:", ex)
-    finally:
-        await coordinator.api.close()
-
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+
+
+async def async_remove_entry(hass: HomeAssistant, entry: EcoPilotConfigEntry) -> None:
+    """Handle removal of an entry."""
+
+    # Delete token from device
+    entry_data = hass.data[DOMAIN].get(entry.entry_id)
+
+    if entry_data and (coordinator := entry_data.get("coordinator")):
+
+        uuid = await instance_id.async_get(hass)
+
+        try:
+            await coordinator.api.delete_token(f"home-assistant#{uuid[:6]}")
+        except Exception as ex:
+            LOGGER.warning("Error deleting token:", ex)
+        finally:
+            await coordinator.api.close()
+
+        hass.data[DOMAIN].pop(entry.entry_id)
