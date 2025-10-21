@@ -91,11 +91,11 @@ class FirmwareUpdater:
                 )
                 return None
 
-        except (aiohttp.ClientError, asyncio.TimeoutError) as err:
-            LOGGER.error(f"Network error during HEAD request for {url}: {err}")
+        except (aiohttp.ClientError, asyncio.TimeoutError) as ex:
+            LOGGER.error(f"Network error during HEAD request for {url}: {ex}")
             return None
-        except Exception as err:
-            LOGGER.error(f"Unexpected error while retrieving firmware size : {err}")
+        except Exception as ex:
+            LOGGER.error(f"Unexpected error while retrieving firmware size : {ex}")
             return None
 
     async def async_get_latest_firmware_metadata(
@@ -118,12 +118,12 @@ class FirmwareUpdater:
 
                 metadata_json = await response.json()
 
-        except (aiohttp.ClientError, asyncio.TimeoutError) as err:
+        except (aiohttp.ClientError, asyncio.TimeoutError) as ex:
             raise MetadataError(
-                f"Network error or timeout while getting metadata: {err}"
-            ) from err
-        except Exception as err:
-            raise MetadataError(f"Error parsing metadata JSON: {err}") from err
+                f"Network error or timeout while getting metadata: {ex}"
+            ) from ex
+        except Exception as ex:
+            raise MetadataError(f"Error parsing metadata JSON: {ex}") from ex
 
         # Check if the product matches
         if metadata_json.get("product") != product_model:
@@ -160,12 +160,12 @@ class FirmwareUpdater:
         # Recover firmware size
         try:
             firmware_size = await self.async_get_firmware_size(latest_url)
-        except (aiohttp.ClientError, asyncio.TimeoutError) as err:
+        except (aiohttp.ClientError, asyncio.TimeoutError) as ex:
             raise MetadataError(
-                f"Network error or timeout while getting firmware size: {err}"
-            ) from err
-        except Exception as err:
-            raise MetadataError(f"Error getting firmware size: {err}") from err
+                f"Network error or timeout while getting firmware size: {ex}"
+            ) from ex
+        except Exception as ex:
+            raise MetadataError(f"Error getting firmware size: {ex}") from ex
 
         # Check if there is a new version
         if latest_version and latest_version > current_version:
@@ -235,15 +235,15 @@ class FirmwareUpdater:
                         ) * self.DOWNLOAD_WEIGHT
                         await callback(int(downloaded_progress), "downloading")
 
-        except aiohttp.ClientError as err:
-            raise DownloadError(f"Network error during download: {err}") from err
+        except aiohttp.ClientError as ex:
+            raise DownloadError(f"Network error during download: {ex}") from ex
 
-        calculated_sha256 = hasher.hexdigest().upper()
-        expected_sha256_upper = expected_sha256.upper()
+        calculated_sha256 = hasher.hexdigest().lower()
+        expected_sha256 = expected_sha256[7:].strip().lower()  # Remove prefix
 
-        if calculated_sha256 != expected_sha256_upper:
+        if calculated_sha256 != expected_sha256:
             LOGGER.error(
-                f"SHA256 mismatch. Expected: {expected_sha256_upper}, Got: {calculated_sha256}"
+                f"SHA256 mismatch. Expected: {expected_sha256}, Got: {calculated_sha256}"
             )
             raise IntegrityError("SHA256 verification failed.")
 
@@ -297,8 +297,8 @@ class FirmwareUpdater:
             raise TransferError(
                 "TCP connection refused. Device not listening on dedicated port."
             )
-        except Exception as err:
-            raise TransferError(f"Critical TCP/IP error: {err}") from err
+        except Exception as ex:
+            raise TransferError(f"Critical TCP/IP error: {ex}") from ex
         finally:
             if writer:
                 writer.close()
