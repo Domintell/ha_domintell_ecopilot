@@ -14,6 +14,7 @@ from homeassistant.components.update import (
 )
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .const import LOGGER
@@ -22,7 +23,6 @@ from .coordinator import (
     EcoPilotDeviceUpdateCoordinator,
 )
 from .entity import EcoPilotEntity
-
 
 PARALLEL_UPDATES = 1
 
@@ -148,7 +148,8 @@ class EcoPilotUpdateEntity(EcoPilotEntity, UpdateEntity):
                 metadata,
                 progress_callback=self.update_progress,
             )
-
+        except Exception as ex:
+            raise HomeAssistantError(ex) from ex
         finally:
             self._attr_in_progress = False
             self._attr_update_percentage = None
