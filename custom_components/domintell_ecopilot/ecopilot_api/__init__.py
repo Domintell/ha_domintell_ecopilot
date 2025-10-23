@@ -217,7 +217,7 @@ class DomintellEcopilotV1(DomintellEcopilot):
         await self._request("/api/system/reboot", method=METH_PUT)
 
     @authorized_method
-    async def update(self, fw_size: int | None, fw_integrity: str | None) -> None:
+    async def update(self, fw_size: int | None, fw_signature: str | None) -> None:
         """Enable update mode on the Domintell EcoPilot device."""
 
         if self._device is not None and self._device.supports_update() is False:
@@ -226,10 +226,10 @@ class DomintellEcopilotV1(DomintellEcopilot):
         data = {}
         if fw_size is not None:
             data["fw_size"] = fw_size
-        if fw_integrity is not None:
-            data["fw_integrity"] = fw_integrity
+        if fw_signature is not None:
+            data["fw_signature"] = fw_signature
 
-        await self._request("/api/system/update", method=METH_POST, data=data)
+        await self._request("/api/system/firmware/update", method=METH_POST, data=data)
 
     async def get_token(
         self,

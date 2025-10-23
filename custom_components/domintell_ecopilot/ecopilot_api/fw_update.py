@@ -27,6 +27,7 @@ class FirmwareMetadata:
         product: str,
         version: str,
         url: str,
+        signature: str,
         integrity: str,
         size: int,
         release_notes: str,
@@ -35,6 +36,7 @@ class FirmwareMetadata:
         self.product = product
         self.version = version
         self.url = url
+        self.signature = signature
         self.integrity = integrity
         self.size = size
         self.release_notes = release_notes
@@ -46,6 +48,7 @@ class FirmwareMetadata:
             "product": self.product,
             "version": self.version,
             "url": self.url,
+            "signature": self.signature,
             "integrity": self.integrity,
             "size": self.size,
             "release_notes": self.release_notes,
@@ -147,19 +150,20 @@ class FirmwareUpdater:
 
         latest_version = latest_fw_info.get("version")
         latest_url = latest_fw_info.get("url")
-        integrity_str = latest_fw_info.get("integrity", "")
+        signature = latest_fw_info.get("signature", "")
+        integrity = latest_fw_info.get("integrity", "")
         release_notes = latest_fw_info.get("release_notes", "")
         changelog_url = firmware_changelog_url
 
         # Validation and extraction of the hash
-        if not latest_version or not latest_url or not integrity_str:
+        if not latest_version or not latest_url or not signature or not integrity:
             LOGGER.error("Incomplete data in 'latest_version' section.")
             return None
 
-        if integrity_str.lower().startswith("sha256:"):
-            sha256_hash = integrity_str[7:].strip()
+        if signature.lower().startswith("sha256:"):
+            sha256_hash = signature[7:].strip()
         else:
-            LOGGER.error(f"Unsupported integrity format: {integrity_str}")
+            LOGGER.error(f"Unsupported signature format: {signature}")
             return None
 
         # Recover firmware size
@@ -179,7 +183,8 @@ class FirmwareUpdater:
                 product=product_model,
                 version=latest_version,
                 url=latest_url,
-                integrity=integrity_str,
+                signature=signature,
+                integrity=integrity,
                 size=firmware_size,
                 release_notes=release_notes,
                 changelog_url=changelog_url,
@@ -212,14 +217,14 @@ class FirmwareUpdater:
     async def _async_download_firmware(
         self,
         url: str,
-        expected_sha256: str,
+        expected_integrity: str,
         callback: Callable[[int, str], Coroutine[Any, Any, None]] | None,
     ) -> tuple[bytes, int]:
-        """Streaming download with SHA256 verification."""
+        """Streaming download with integrity verification."""
 
         LOGGER.info(f"Starting download from: {url}")
         firmware_data = bytearray()
-        hasher = hashlib.sha256()
+        hasher = hashlib.md5()
         total_size = 0
 
         try:
@@ -243,14 +248,14 @@ class FirmwareUpdater:
         except aiohttp.ClientError as ex:
             raise DownloadError(f"Network error during download: {ex}") from ex
 
-        calculated_sha256 = hasher.hexdigest().lower()
-        expected_sha256 = expected_sha256[7:].strip().lower()  # Remove prefix
+        calculated_md5 = hasher.hexdigest().lower()
+        expected_md5 = expected_integrity.strip().lower()
 
-        if calculated_sha256 != expected_sha256:
+        if calculated_md5 != expected_md5:
             LOGGER.error(
-                f"SHA256 mismatch. Expected: {expected_sha256}, Got: {calculated_sha256}"
+                f"MD5 mismatch. Expected: {expected_md5}, Got: {calculated_md5}"
             )
-            raise IntegrityError("SHA256 verification failed.")
+            raise IntegrityError("Integrity verification failed.")
 
         LOGGER.info("[Firmware transfer completed].")
         return bytes(firmware_data), total_size

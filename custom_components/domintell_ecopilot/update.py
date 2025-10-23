@@ -136,11 +136,11 @@ class EcoPilotUpdateEntity(EcoPilotEntity, UpdateEntity):
         try:
             metadata = self.coordinator.latest_firmware_metadata
             fw_size = metadata.size
-            integrity = metadata.integrity
+            signature = metadata.signature
             updater = self.coordinator.fw_updater
 
             # Enable update mode
-            await self.coordinator.api.update(fw_size=fw_size, fw_integrity=integrity)
+            await self.coordinator.api.update(fw_size=fw_size, fw_signature=signature)
             await asyncio.sleep(1)  # Wait for the device to be ready
 
             # Start download and transfert to device
