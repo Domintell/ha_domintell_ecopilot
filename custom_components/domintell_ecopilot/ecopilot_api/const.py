@@ -6,7 +6,7 @@ from enum import StrEnum
 LOGGER = logging.getLogger(__name__)
 
 METADATA_BASE_FW_URL = "https://pro.mydomintell.com/private/fw/ecopilot/"
-FW_UPDATE_PORT = 9000
+FW_UPDATE_PORT = 5000
 
 
 class Model(StrEnum):
