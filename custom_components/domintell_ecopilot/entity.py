@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from homeassistant.const import ATTR_CONNECTIONS, ATTR_IDENTIFIERS, ATTR_SERIAL_NUMBER
+from homeassistant.const import ATTR_CONNECTIONS, ATTR_IDENTIFIERS, 
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -27,8 +28,7 @@ class EcoPilotEntity(CoordinatorEntity[EcoPilotDeviceUpdateCoordinator]):
             device_name = f"{device_name} ({coordinator.data.device.serial_number})"
 
         self._attr_device_info = DeviceInfo(
-            name=device_name,  # TODO donner un nom ici va inclure dans le nom de l'entité également
-            # default_name=device_name, #TODO
+            name=device_name,
             model_id=coordinator.data.device.product_model,
             model=coordinator.data.device.model_name,
             serial_number=coordinator.data.device.serial_number,
@@ -37,8 +37,13 @@ class EcoPilotEntity(CoordinatorEntity[EcoPilotDeviceUpdateCoordinator]):
             manufacturer="Domintell",
         )
 
-        if (serial_number := coordinator.data.device.serial_number) is not None:
+        if (mac_address := coordinator.data.device.mac_address.lower()) is not None:
             self._attr_device_info[ATTR_CONNECTIONS] = {
-                (CONNECTION_NETWORK_MAC, serial_number)
+                (CONNECTION_NETWORK_MAC, mac_address)
             }
-            self._attr_device_info[ATTR_IDENTIFIERS] = {(DOMAIN, serial_number)}
+            self._attr_device_info[ATTR_IDENTIFIERS] = {(DOMAIN, mac_address)}
+
+        else:
+            serial_number = coordinator.data.device.serial_number
+            product_model = coordinator.data.device.product_model.lower()
+            self._attr_device_info[ATTR_IDENTIFIERS] = {(DOMAIN, product_model + "_" + serial_number)}

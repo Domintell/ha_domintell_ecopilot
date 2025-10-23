@@ -3,9 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
-from enum import StrEnum
-from typing import Any
 
 from mashumaro.mixins.orjson import DataClassORJSONMixin
 
@@ -81,6 +78,7 @@ class Device(BaseModel):
     product_model: str = field()
     serial_number: str = field()
     firmware_version: str = field()
+    mac_address: str = field()
     hardware_version: str = field()
     api_version: str = field()
 
