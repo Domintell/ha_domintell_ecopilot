@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from homeassistant.const import ATTR_CONNECTIONS, ATTR_IDENTIFIERS, 
+from homeassistant.const import ATTR_CONNECTIONS, ATTR_IDENTIFIERS
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -37,13 +37,15 @@ class EcoPilotEntity(CoordinatorEntity[EcoPilotDeviceUpdateCoordinator]):
             manufacturer="Domintell",
         )
 
-        if (mac_address := coordinator.data.device.mac_address.lower()) is not None:
+        if (mac_address := coordinator.data.device.mac_address) is not None:
             self._attr_device_info[ATTR_CONNECTIONS] = {
-                (CONNECTION_NETWORK_MAC, mac_address)
+                (CONNECTION_NETWORK_MAC, mac_address.lower())
             }
             self._attr_device_info[ATTR_IDENTIFIERS] = {(DOMAIN, mac_address)}
 
         else:
             serial_number = coordinator.data.device.serial_number
             product_model = coordinator.data.device.product_model.lower()
-            self._attr_device_info[ATTR_IDENTIFIERS] = {(DOMAIN, product_model + "_" + serial_number)}
+            self._attr_device_info[ATTR_IDENTIFIERS] = {
+                (DOMAIN, product_model + "_" + serial_number)
+            }
