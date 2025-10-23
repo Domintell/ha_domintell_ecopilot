@@ -418,7 +418,9 @@ class EcoPilotConfigFlow(ConfigFlow, domain=DOMAIN):
         # We do not add mac/serial to the title for devices
         # that users do not typically own multiple copies of.
         name = self.product_name
-        if self.product_model not in ["ecoP1", "ecoDrive-P1", "ecoDrive-LK"]:
+        if self.product_model not in [
+            "ecoP1",
+        ]:
             name = f"{name} ({self.serial_number})"
 
         self.context["title_placeholders"] = {"name": name}

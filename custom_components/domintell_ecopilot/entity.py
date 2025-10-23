@@ -22,8 +22,6 @@ class EcoPilotEntity(CoordinatorEntity[EcoPilotDeviceUpdateCoordinator]):
         device_name = coordinator.data.device.model_name
         if coordinator.data.device.product_model not in [
             "ecoP1",
-            "ecoDrive-P1",
-            "ecoDrive-LK",
         ]:
             device_name = f"{device_name} ({coordinator.data.device.serial_number})"
 
