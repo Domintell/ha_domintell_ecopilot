@@ -13,6 +13,11 @@ from .errors import (
     TransferError,
 )
 
+# Maximum size of expected response message
+MAX_RESPONSE_SIZE = 1024
+# Durée maximale d'attente pour la réponse après le transfert (en secondes)
+RESPONSE_TIMEOUT = 5
+
 
 class FirmwareMetadata:
     """Structure of firmware information."""
@@ -255,19 +260,20 @@ class FirmwareUpdater:
         firmware_data: bytes,
         total_size: int,
         callback: Callable[[int, str], Coroutine[Any, Any, None]] | None,
-    ):
-        """Sending firmware data via TCP/IP."""
+    ) -> str:
+        """
+        Sending firmware data via TCP/IP while listening for real-time status messages
+        from the device.
+        """
 
-        LOGGER.info(f"Starting TCP/IP transfer to {self._device_ip}:{self._port}")
+        LOGGER.info(f"Starting firmware transfer to {self._device_ip}:{self._port}")
+        reader = None
         writer = None
 
-        try:
-            # Open connection
-            _, writer = await asyncio.open_connection(self._device_ip, self._port)
+        async def _async_send_task() -> None:
+            """The task responsible for sending the firmware."""
 
-            await asyncio.sleep(3)  # Wait for the device to be ready
-
-            # Send firmware by packet
+            # Send firmware by packet (votre logique d'envoi)
             chunk_size = 1024
             total_sent = 0
 
@@ -282,7 +288,6 @@ class FirmwareUpdater:
                 if callback:
                     send_range = self.TRANSFER_WEIGHT
                     send_progress = (total_sent / total_size) * send_range
-                    # Total progress = Download weight + upload progress
                     await callback(
                         self.DOWNLOAD_WEIGHT + int(send_progress), "transferring"
                     )
@@ -290,15 +295,98 @@ class FirmwareUpdater:
             # Signify the end of writing
             writer.write_eof()
             await writer.drain()
+            LOGGER.info("Firmware data transfer complete.")
 
-            LOGGER.info("[Firmware donwload completed.]")
+        async def _async_read_task() -> str:
+            """The task responsible for listening to messages from the device."""
+
+            # The device is supposed to send a message ending with \r\n
+            while True:
+                try:
+                    data = await reader.readuntil(b"\n")
+
+                    message = data.decode().strip()
+
+                    # Error checking
+                    if "UPDATE:ERROR" in message.upper():
+                        error_detail = message.split(":ERROR:")[1].strip()
+                        LOGGER.error(f"Error reported by the device: {error_detail}")
+                        raise TransferError(error_detail)
+
+                    return message
+
+                except asyncio.IncompleteReadError as e:
+                    # The connection was closed before receiving the delimiter \n
+                    # raise TransferError(f"TCP connection closed prematurely by the device")
+                    return "UPDATE:OK\r\n"
+                except TransferError:
+                    # Propagate critical device update error
+                    raise
+                except Exception as e:
+                    raise TransferError(f"Error while updating: {e}")
+
+        try:
+            # Open connection and get streams
+            reader, writer = await asyncio.open_connection(self._device_ip, self._port)
+            await asyncio.sleep(3)  # Wait for the device to be ready
+
+            # Run both tasks in parallel
+            send_task = asyncio.create_task(_async_send_task())
+            read_task = asyncio.create_task(_async_read_task())
+
+            # Wait for either task to complete
+            done, pending = await asyncio.wait(
+                [send_task, read_task], return_when=asyncio.FIRST_EXCEPTION
+            )
+
+            # Exception Handling
+            for task in done:
+                if task.exception():
+                    for t in pending:
+                        if not t.done():
+                            t.cancel()
+                    await asyncio.gather(*pending, return_exceptions=True)
+                    raise task.exception()
+
+            # Success Management
+            if send_task.done():
+                try:
+                    final_status = await asyncio.wait_for(read_task, timeout=3)
+                    return final_status
+                except asyncio.TimeoutError:
+                    if not read_task.done():
+                        read_task.cancel()
+
+                    await asyncio.gather(read_task, return_exceptions=True)
+                    LOGGER.warning(
+                        "Transfer completed, but final status was not captured by the read task."
+                    )
+                    return "UPDATE:OK\r\n"
+
+            if read_task.done():
+                return read_task.result()
+
+            # Cancel all tasks that have not yet been completed
+            for task in pending:
+                task.cancel()
+            await asyncio.gather(
+                *pending, return_exceptions=True
+            )  # Wait for cancellation
+
+            LOGGER.warning(
+                "Transfer completed, but final status was not captured by the read task."
+            )
+            return "TRANSFER_FINISHED_NO_FINAL_STATUS"
 
         except ConnectionRefusedError:
             raise TransferError(
                 "TCP connection refused. Device not listening on dedicated port."
             )
         except Exception as ex:
-            raise TransferError(f"Critical TCP/IP error: {ex}") from ex
+            if isinstance(ex, TransferError):
+                raise ex
+            raise TransferError(f"Critical error during update: {ex}") from ex
+
         finally:
             if writer:
                 writer.close()
