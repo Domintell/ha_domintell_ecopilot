@@ -1168,14 +1168,15 @@ class EcoPilotP1SensorEntity(EcoPilotEntity, SensorEntity):
         self.entity_description = description
         self._device_id = device_unique_id
         self._attr_unique_id = f"{DOMAIN}_{device_unique_id}_{description.key}"
-        manufacturer = coordinator.data.measurement.p1.meter_model.split(" ", 1)[0]
+        meter_model = coordinator.data.measurement.p1.meter_model
+        manufacturer = meter_model.split(" ", 1)[0]
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, device_unique_id)},
             name="P1 meter",
             manufacturer="Domintell",
             # manufacturer=manufacturer if manufacturer != "" else "Domintell", #TODO
             model="Smart meter",
-            model_id=coordinator.data.measurement.p1.meter_model,  # what is in parentheses
+            model_id=meter_model if meter_model else None,  # what is in parentheses
             serial_number=device_unique_id,
         )
 
