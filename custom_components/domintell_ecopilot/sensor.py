@@ -1175,14 +1175,15 @@ class EcoPilotP1SensorEntity(EcoPilotEntity, SensorEntity):
             manufacturer="Domintell",
             # manufacturer=manufacturer if manufacturer != "" else "Domintell", #TODO
             model="Smart meter",
-            model_id=coordinator.data.measurement.p1.meter_model,  # TODO ce qui est entre parenthèses
+            model_id=coordinator.data.measurement.p1.meter_model,  # what is in parentheses
             serial_number=device_unique_id,
         )
-        if coordinator.data.device.serial_number is not None:
-            self._attr_device_info[ATTR_VIA_DEVICE] = (
-                DOMAIN,
-                coordinator.data.device.serial_number,
-            )
+
+        device_identifier = f"{coordinator.data.device.product_model}_{coordinator.data.device.serial_number}"
+        self._attr_device_info[ATTR_VIA_DEVICE] = (
+            DOMAIN,
+            device_identifier,
+        )
 
     @property
     def native_value(self) -> StateType | datetime | None:

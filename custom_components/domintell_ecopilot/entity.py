@@ -39,13 +39,8 @@ class EcoPilotEntity(CoordinatorEntity[EcoPilotDeviceUpdateCoordinator]):
 
         if (mac_address := coordinator.data.device.mac_address) is not None:
             self._attr_device_info[ATTR_CONNECTIONS] = {
-                (CONNECTION_NETWORK_MAC, mac_address.lower())
+                (CONNECTION_NETWORK_MAC, mac_address)
             }
-            self._attr_device_info[ATTR_IDENTIFIERS] = {(DOMAIN, mac_address)}
 
-        else:
-            serial_number = coordinator.data.device.serial_number
-            product_model = coordinator.data.device.product_model.lower()
-            self._attr_device_info[ATTR_IDENTIFIERS] = {
-                (DOMAIN, product_model + "_" + serial_number)
-            }
+        device_identifier = f"{coordinator.data.device.product_model}_{coordinator.data.device.serial_number}"
+        self._attr_device_info[ATTR_IDENTIFIERS] = {(DOMAIN, device_identifier)}
