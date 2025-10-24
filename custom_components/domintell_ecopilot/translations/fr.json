@@ -123,6 +123,9 @@
       },
       "relay2": {
         "name": "Relais 2"
+      },
+      "override_pwm": {
+        "name": "Forcer PWM"
       }
     },
     "number": {

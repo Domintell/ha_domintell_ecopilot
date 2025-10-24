@@ -552,6 +552,9 @@ class Config(BaseModel):
     mode: int | None = field(
         default=None,
     )
+    override_pwm: bool | None = field(
+        default=None,
+    )
     max_temperature: int | None = field(
         default=None,
     )
@@ -611,6 +614,7 @@ class ConfigUpdate:
 
     # ecoDrive Specific
     mode: int | None = field(default=None)
+    override_pwm: bool | None = field(default=None)
     max_temperature: int | None = field(default=None)
     max_peak_power: int | None = field(default=None)
     max_pwm_power: int | None = field(default=None)

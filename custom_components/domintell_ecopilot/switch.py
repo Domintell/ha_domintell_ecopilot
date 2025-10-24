@@ -85,6 +85,16 @@ SWITCHES = [
         is_on_fn=lambda x: x.state.relay2_state if x.state else None,
         set_fn=lambda api, active: api.state(relay2_state=active),
     ),
+    EcoPilotSwitchEntityDescription(
+        key="override_pwm",
+        translation_key="override_pwm",
+        entity_category=EntityCategory.CONFIG,
+        create_fn=lambda x: x.device.supports_config()
+        and x.config.override_pwm is not None,
+        available_fn=lambda x: x.config is not None,
+        is_on_fn=lambda x: x.config.override_pwm if x.config else None,
+        set_fn=lambda api, active: api.config(override_pwm=active),
+    ),
 ]
 
 

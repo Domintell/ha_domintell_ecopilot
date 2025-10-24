@@ -123,6 +123,9 @@
       },
       "relay2": {
         "name": "Relay 2"
+      },
+      "override_pwm": {
+        "name": "Override PWM"
       }
     },
     "number": {

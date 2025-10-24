@@ -102,6 +102,12 @@
         "state": {
           "off": "mdi:lock-open"
         }
+      },
+      "override_pwm": {
+        "default": "mdi:lock",
+        "state": {
+          "off": "mdi:lock-open"
+        }
       }
     },
     "number": {
