@@ -138,6 +138,9 @@
       "max_peak_power": {
         "name": "Power peak max."
       },
+      "max_pwm_power": {
+        "name": "PWM power max."
+      },
       "current_heating_oil_volume": {
         "name": "Current heating oil volume"
       },
@@ -194,6 +197,12 @@
       },
       "power": {
         "name": "Power"
+      },
+      "power_import": {
+        "name": "Power imported"
+      },
+      "power_export": {
+        "name": "Power exported"
       },
       "power_phase": {
         "name": "Power phase {phase}"

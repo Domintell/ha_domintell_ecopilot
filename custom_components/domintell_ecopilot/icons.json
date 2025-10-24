@@ -42,6 +42,12 @@
       "voltage_swell_l3": {
         "default": "mdi:alert"
       },
+      "power_import": {
+        "default": "mdi:powerimport"
+      },
+      "power_export": {
+        "default": "mdi:export"
+      },
       "any_power_fail_count": {
         "default": "mdi:transmission-tower-off"
       },
@@ -106,6 +112,9 @@
         "default": "mdi:thermometer-water"
       },
       "max_peak_power": {
+        "default": "mdi:flash"
+      },
+      "max_pwm_power": {
         "default": "mdi:flash"
       },
       "heating_oil_energy_density": {

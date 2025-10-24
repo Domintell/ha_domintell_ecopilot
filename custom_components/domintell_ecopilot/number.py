@@ -104,6 +104,22 @@ NUMBERS: Final[tuple[EcoPilotNumberEntityDescription, ...]] = (
         set_fn=lambda api, value: api.config(max_peak_power=value),
     ),
     EcoPilotNumberEntityDescription(
+        key="max_pwm_power",
+        translation_key="max_pwm_power",
+        native_unit_of_measurement=UnitOfPower.WATT,
+        entity_category=EntityCategory.CONFIG,
+        native_min_value=100,
+        native_max_value=3000,
+        native_step=100,
+        mode="box",
+        device_class=NumberDeviceClass.POWER,
+        available_fn=lambda api: api.config is not None,
+        has_fn=lambda api: api.config is not None
+        and api.config.max_pwm_power is not None,
+        value_fn=lambda api: api.config.max_pwm_power,
+        set_fn=lambda api, value: api.config(max_pwm_power=value),
+    ),
+    EcoPilotNumberEntityDescription(
         key="current_heating_oil_volume",
         translation_key="current_heating_oil_volume",
         native_unit_of_measurement=UnitOfVolume.LITERS,

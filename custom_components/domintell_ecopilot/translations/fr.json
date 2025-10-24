@@ -138,6 +138,9 @@
       "max_peak_power": {
         "name": "Puissance crête max."
       },
+      "max_pwm_power": {
+        "name": "Puissance PWM max."
+      },
       "current_heating_oil_volume": {
         "name": "Volume actuel de mazout"
       },
@@ -194,6 +197,12 @@
       },
       "power": {
         "name": "Puissance"
+      },
+      "power_import": {
+        "name": "Puissance importée"
+      },
+      "power_export": {
+        "name": "Puissance exportée"
       },
       "power_phase": {
         "name": "Puissance phase {phase}"

@@ -191,6 +191,12 @@ class Measurement(BaseModel):
     power: float | None = field(
         default=None,
     )
+    power_import: float | None = field(
+        default=None,
+    )
+    power_export: float | None = field(
+        default=None,
+    )
     power_l1: float | None = field(
         default=None,
     )
@@ -546,10 +552,13 @@ class Config(BaseModel):
     mode: int | None = field(
         default=None,
     )
-    max_temperature: float | None = field(
+    max_temperature: int | None = field(
         default=None,
     )
-    max_peak_power: float | None = field(
+    max_peak_power: int | None = field(
+        default=None,
+    )
+    max_pwm_power: int | None = field(
         default=None,
     )
 
@@ -602,8 +611,9 @@ class ConfigUpdate:
 
     # ecoDrive Specific
     mode: int | None = field(default=None)
-    max_temperature: float | None = field(default=None)
-    max_peak_power: float | None = field(default=None)
+    max_temperature: int | None = field(default=None)
+    max_peak_power: int | None = field(default=None)
+    max_pwm_power: int | None = field(default=None)
 
     # tankSense Specific
     distance_offset: float | None = field(default=None)
