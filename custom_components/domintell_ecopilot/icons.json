@@ -43,7 +43,7 @@
         "default": "mdi:alert"
       },
       "power_import": {
-        "default": "mdi:powerimport"
+        "default": "mdi:import"
       },
       "power_export": {
         "default": "mdi:export"
