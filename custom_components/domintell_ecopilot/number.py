@@ -129,7 +129,7 @@ NUMBERS: Final[tuple[EcoPilotNumberEntityDescription, ...]] = (
         native_step=100,
         mode="box",
         device_class=NumberDeviceClass.POWER,
-        available_fn=lambda api: api.config is not None,
+        available_fn=lambda api: api.config is not None and api.config.mode != 0,
         has_fn=lambda api: api.config is not None
         and api.config.threshold_power is not None,
         value_fn=lambda api: api.config.threshold_power,
