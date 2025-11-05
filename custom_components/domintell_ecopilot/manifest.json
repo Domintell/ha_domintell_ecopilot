@@ -11,6 +11,6 @@
   "loggers": ["ecopilot"],
   "quality_scale": "no_score",
   "requirements": [],
-  "version": "0.6.1",
+  "version": "0.6.2",
   "zeroconf": ["_ecopilot._tcp.local."]
 }

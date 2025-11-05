@@ -144,6 +144,9 @@
       "max_pwm_power": {
         "name": "PWM power max."
       },
+      "threshold_power": {
+        "name": "Power threshold"
+      },
       "current_heating_oil_volume": {
         "name": "Current heating oil volume"
       },

@@ -144,6 +144,9 @@
       "max_pwm_power": {
         "name": "Puissance PWM max."
       },
+      "threshold_power": {
+        "name": "Seuil de puissance"
+      },
       "current_heating_oil_volume": {
         "name": "Volume actuel de mazout"
       },

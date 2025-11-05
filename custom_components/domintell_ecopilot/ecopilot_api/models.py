@@ -564,6 +564,9 @@ class Config(BaseModel):
     max_pwm_power: int | None = field(
         default=None,
     )
+    threshold_power: int | None = field(
+        default=None,
+    )
 
     # tankSense Specific
     distance_offset: float | None = field(
@@ -618,6 +621,7 @@ class ConfigUpdate:
     max_temperature: int | None = field(default=None)
     max_peak_power: int | None = field(default=None)
     max_pwm_power: int | None = field(default=None)
+    threshold_power: int | None = field(default=None)
 
     # tankSense Specific
     distance_offset: float | None = field(default=None)

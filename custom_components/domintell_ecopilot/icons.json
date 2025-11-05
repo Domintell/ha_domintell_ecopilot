@@ -123,6 +123,9 @@
       "max_pwm_power": {
         "default": "mdi:flash"
       },
+      "threshold_power": {
+        "default": "mdi:tune"
+      },
       "heating_oil_energy_density": {
         "default": "mdi:barrel"
       },
