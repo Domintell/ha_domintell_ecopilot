@@ -148,6 +148,7 @@ class EcoPilotUpdateEntity(EcoPilotEntity, UpdateEntity):
                 metadata,
                 progress_callback=self.update_progress,
             )
+
         except Exception as ex:
             raise HomeAssistantError(ex) from ex
         finally:

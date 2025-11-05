@@ -19,26 +19,38 @@ class EcoPilotEntity(CoordinatorEntity[EcoPilotDeviceUpdateCoordinator]):
     def __init__(self, coordinator: EcoPilotDeviceUpdateCoordinator) -> None:
         """Initialize the Domintell EcoPilot entity."""
         super().__init__(coordinator)
-        device_name = coordinator.data.device.model_name
-        if coordinator.data.device.product_model not in [
-            "ecoP1",
-        ]:
-            device_name = f"{device_name} ({coordinator.data.device.serial_number})"
 
-        self._attr_device_info = DeviceInfo(
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info."""
+
+        data = self.coordinator.data.device
+
+        device_name = data.model_name
+        if data.product_model not in ["ecoP1"]:
+            device_name = f"{device_name} ({data.serial_number})"
+
+        info = DeviceInfo(
             name=device_name,
-            model_id=coordinator.data.device.product_model,
-            model=coordinator.data.device.model_name,
-            serial_number=coordinator.data.device.serial_number,
-            hw_version=coordinator.data.device.hardware_version,
-            sw_version=coordinator.data.device.firmware_version,
+            model_id=data.product_model,
+            model=data.model_name,
+            serial_number=data.serial_number,
+            hw_version=data.hardware_version,
+            sw_version=data.firmware_version,
             manufacturer="Domintell",
         )
 
-        if (mac_address := coordinator.data.device.mac_address) is not None:
-            self._attr_device_info[ATTR_CONNECTIONS] = {
-                (CONNECTION_NETWORK_MAC, mac_address)
-            }
+        if (mac_address := data.mac_address) is not None:
+            info[ATTR_CONNECTIONS] = {(CONNECTION_NETWORK_MAC, mac_address)}
 
-        device_identifier = f"{coordinator.data.device.product_model}_{coordinator.data.device.serial_number}"
-        self._attr_device_info[ATTR_IDENTIFIERS] = {(DOMAIN, device_identifier)}
+        device_identifier = f"{data.product_model}_{data.serial_number}"
+        info[ATTR_IDENTIFIERS] = {(DOMAIN, device_identifier)}
+
+        return info
+
+    def _handle_coordinator_update(self) -> None:
+        """
+        Handles coordinator update notifications.
+        This method is called by the parent class CoordinatorEntity.
+        """
+        self.schedule_update_ha_state()

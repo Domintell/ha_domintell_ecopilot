@@ -5,6 +5,7 @@ from __future__ import annotations
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 
@@ -41,6 +42,7 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
 
         self.api = api
         self.fw_updater = fw_updater
+        self._last_firmware = None
 
         # Initiates the creation and startup of the firmware coordinator
         self.hass.async_create_task(self._async_setup_fw_coordinator())
@@ -73,6 +75,27 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
 
         except UnauthorizedError as ex:
             raise ConfigEntryAuthFailed from ex
+
+        try:
+            new_fw = getattr(data.device, "firmware_version", None)
+            last_fw = getattr(self, "_last_firmware", None)
+
+            if new_fw and last_fw != new_fw:
+                self._last_firmware = new_fw
+
+                device_registry = dr.async_get(self.hass)
+                device_identifier = (
+                    f"{data.device.product_model}_{data.device.serial_number}"
+                )
+                device = device_registry.async_get_device(
+                    identifiers={(DOMAIN, device_identifier)}
+                )
+
+                if device:
+                    device_registry.async_update_device(device.id, sw_version=new_fw)
+
+        except Exception as ex:
+            pass
 
         self.data = data
         return data
@@ -115,3 +138,9 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
         if self.fw_update_coordinator:
             await self.fw_update_coordinator.async_shutdown()
         return await super().async_unload()
+
+    async def async_update_device_info(hass, device_id, new_firmware):
+        device_registry = dr.async_get(hass)
+        device = device_registry.async_get(device_id)
+        if device:
+            device_registry.async_update_device(device.id, sw_version=new_firmware)

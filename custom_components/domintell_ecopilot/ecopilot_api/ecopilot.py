@@ -62,7 +62,7 @@ class DomintellEcopilot:
                 return None
 
         device, measurement, state, config, system = await asyncio.gather(
-            fetch_data(self.device()),
+            fetch_data(self.device(reset_cache=True)),
             fetch_data(self.measurement()),
             fetch_data(self.state()),
             fetch_data(self.config()),
