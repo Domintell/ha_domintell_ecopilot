@@ -98,13 +98,13 @@
       "p1_data": {
         "default": "mdi:check-circle",
         "state": {
-          "off": "mdi:alert-circle-outline"
+          "off": "mdi:alert-circle"
         }
       },
       "mcu_status": {
         "default": "mdi:check-circle",
         "state": {
-          "off": "mdi:alert-circle-outline"
+          "off": "mdi:alert-circle"
         }
       }
     },
