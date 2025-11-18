@@ -18,6 +18,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import StateType
+from homeassistant.const import EntityCategory
 
 from .const import DOMAIN
 from .coordinator import (
@@ -42,6 +43,46 @@ BINARY_SENSORS: Final[tuple[EcoPilotBinarySensorEntityDescription, ...]] = (
         translation_key="burner_state",
         has_fn=lambda data: data.measurement.burner_state is not None,
         value_fn=lambda data: data.measurement.burner_state,
+    ),
+    EcoPilotBinarySensorEntityDescription(
+        key="p1_data",
+        translation_key="p1_data",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        has_fn=lambda data: data.system.p1_data is not None,
+        value_fn=lambda data: data.system.p1_data,
+    ),
+    EcoPilotBinarySensorEntityDescription(
+        key="mcu_status",
+        translation_key="mcu_status",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        has_fn=lambda data: data.system.mcu_status is not None,
+        value_fn=lambda data: data.system.mcu_status,
+    ),
+    EcoPilotBinarySensorEntityDescription(
+        key="temperature_probe",
+        translation_key="temperature_probe",
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        has_fn=lambda data: data.system.temperature_probe is not None,
+        value_fn=lambda data: data.system.temperature_probe,
+    ),
+    EcoPilotBinarySensorEntityDescription(
+        key="bad_load",
+        translation_key="bad_load",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        has_fn=lambda data: data.system.bad_load is not None,
+        value_fn=lambda data: data.system.bad_load,
+    ),
+    EcoPilotBinarySensorEntityDescription(
+        key="overheat",
+        translation_key="overheat",
+        device_class=BinarySensorDeviceClass.HEAT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        has_fn=lambda data: data.system.overheat is not None,
+        value_fn=lambda data: data.system.overheat,
     ),
 )
 

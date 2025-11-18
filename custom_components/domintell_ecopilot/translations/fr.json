@@ -165,6 +165,25 @@
     "binary_sensor": {
       "burner_state": {
         "name": "État du brûleur"
+      },
+      "p1_data": {
+        "name": "Données p1",
+        "state": {
+          "on": "Présente",
+          "off": "Absente"
+        }
+      },
+      "mcu_status": {
+        "name": "État MCU"
+      },
+      "temperature_probe": {
+        "name": "Sonde température"
+      },
+      "bad_load": {
+        "name": "Charge"
+      },
+      "overheat": {
+        "name": "Surchauffe"
       }
     },
     "sensor": {

@@ -165,6 +165,25 @@
     "binary_sensor": {
       "burner_state": {
         "name": "Burner state"
+      },
+      "p1_data": {
+        "name": "P1 data",
+        "state": {
+          "on": "Present",
+          "off": "Absent"
+        }
+      },
+      "mcu_status": {
+        "name": "MCU status"
+      },
+      "temperature_probe": {
+        "name": "Temp. probe"
+      },
+      "bad_load": {
+        "name": "Load"
+      },
+      "overheat": {
+        "name": "Overheat"
       }
     },
     "sensor": {

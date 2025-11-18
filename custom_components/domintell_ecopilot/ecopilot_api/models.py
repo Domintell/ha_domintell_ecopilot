@@ -647,6 +647,13 @@ class System(BaseModel):
     wifi_strength: int | None = None
     uptime: int | None = field(default=None)
 
+    # ecoDrive Specific
+    p1_data: bool | None = field(default=None)
+    mcu_status: bool | None = field(default=None)
+    temperature_probe: bool | None = field(default=None)
+    bad_load: bool | None = field(default=None)
+    overheat: bool | None = field(default=None)
+
 
 @dataclass(kw_only=True)
 class Token(BaseModel):
