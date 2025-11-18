@@ -167,7 +167,7 @@
         "name": "État du brûleur"
       },
       "p1_data": {
-        "name": "Données p1",
+        "name": "Données P1",
         "state": {
           "on": "Présente",
           "off": "Absente"
