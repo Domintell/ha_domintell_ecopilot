@@ -94,6 +94,18 @@
         "state": {
           "off": "mdi:fire-off"
         }
+      },
+      "p1_data": {
+        "default": "mdi:check-circle",
+        "state": {
+          "off": "mdi:alert-circle-outline"
+        }
+      },
+      "mcu_status": {
+        "default": "mdi:check-circle",
+        "state": {
+          "off": "mdi:alert-circle-outline"
+        }
       }
     },
     "switch": {
