@@ -174,7 +174,11 @@
         }
       },
       "mcu_status": {
-        "name": "État MCU"
+        "name": "État MCU",
+        "state": {
+          "on": "OK",
+          "off": "Problème"
+        }
       },
       "temperature_probe": {
         "name": "Sonde température"
