@@ -116,7 +116,7 @@
       "safety": {
         "default": "mdi:alert-circle",
         "state": {
-          "off": "mdicheck-circle"
+          "off": "mdi:check-circle"
         }
       }
     },
