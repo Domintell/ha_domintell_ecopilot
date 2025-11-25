@@ -77,11 +77,11 @@ class EcoPilotUpdateEntity(EcoPilotEntity, UpdateEntity):
     def latest_version(self) -> str | None:
         """Latest version available for install."""
 
-        fw_coord = self.coordinator.fw_update_coordinator
+        fw_data = self.coordinator.firmware_update_data
 
-        if fw_coord and fw_coord.data:
-            if fw_coord.data.get("update_available"):
-                fw_info = fw_coord.data.get("latest_firmware_info")
+        if fw_data:
+            if fw_data.get("update_available"):
+                fw_info = fw_data.get("latest_firmware_info")
                 if fw_info:
                     return fw_info.get("version", "")
 
@@ -90,10 +90,10 @@ class EcoPilotUpdateEntity(EcoPilotEntity, UpdateEntity):
     @property
     def release_url(self) -> str | None:
         """Return release url."""
-        fw_coord = self.coordinator.fw_update_coordinator
+        fw_data = self.coordinator.firmware_update_data
 
-        if fw_coord and fw_coord.data:
-            fw_info = fw_coord.data.get("latest_firmware_info")
+        if fw_data:
+            fw_info = fw_data.get("latest_firmware_info")
             if fw_info:
                 return fw_info.get("changelog_url", None)
 

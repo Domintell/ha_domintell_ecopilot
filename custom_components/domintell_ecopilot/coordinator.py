@@ -24,6 +24,9 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
     api: DomintellEcopilotV1
     config_entry: EcoPilotConfigEntry
 
+    _fw_update_counter: int
+    _fw_update_threshold: int
+    
     def __init__(
         self,
         hass: HomeAssistant,
@@ -43,26 +46,13 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
         self.api = api
         self.fw_updater = fw_updater
         self._last_firmware = None
-
-        # Initiates the creation and startup of the firmware coordinator
-        self.hass.async_create_task(self._async_setup_fw_coordinator())
-
-    async def _async_setup_fw_coordinator(self):
-        """
-        Creates the internal coordinator for firmware verification and starts it.
-        """
-
-        self.fw_update_coordinator = DataUpdateCoordinator(
-            self.hass,
-            LOGGER,
-            name=f"{DOMAIN} Firmware Update Checker",
-            update_method=self._async_fw_update_data,
-            update_interval=FIRMWARE_DATA_UPDATE_INTERVAL,
-        )
-
-        # Starts the first firmware check refresh
-        await self.fw_update_coordinator.async_config_entry_first_refresh()
-
+        self._fw_update_counter = 0
+        self._fw_update_threshold = int(
+                    FIRMWARE_DATA_UPDATE_INTERVAL.total_seconds() 
+                    / DATA_UPDATE_INTERVAL.total_seconds()
+                )
+        self.firmware_update_data = {"update_available": False, "latest_firmware_info": None}
+ 
     async def _async_update_data(self) -> DeviceResponseEntry:
         """Fetch all device and sensor data from api."""
         try:
@@ -98,6 +88,14 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
             pass
 
         self.data = data
+        self._fw_update_counter += 1
+
+        if self._fw_update_counter >= self._fw_update_threshold:
+                    LOGGER.debug("Checking for the latest available firmware version.")
+                    self._fw_update_counter = 0
+                    
+                    self.firmware_update_data = await self._async_fw_update_data()
+
         return data
 
     async def _async_fw_update_data(self) -> FirmwareMetadata:
@@ -107,9 +105,9 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
             try:
                 await self.async_config_entry_first_refresh()
             except Exception as ex:
-                return self.fw_update_coordinator.data or {
-                    "update_available": False,
-                    "latest_firmware_info": None,
+                return self.firmware_update_data if hasattr(self, 'firmware_update_data') else {
+                "update_available": False, 
+                "latest_firmware_info": None
                 }
 
         product_model = self.data.device.product_model
@@ -134,9 +132,7 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
         return {"update_available": False, "latest_firmware_info": None}
 
     async def async_unload(self) -> bool:
-        """Cleans up the firmware coordinator when unloading integration."""
-        if self.fw_update_coordinator:
-            await self.fw_update_coordinator.async_shutdown()
+        """Cleanup when unloading integration."""
         return await super().async_unload()
 
     async def async_update_device_info(hass, device_id, new_firmware):
