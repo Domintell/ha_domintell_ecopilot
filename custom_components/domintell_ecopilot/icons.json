@@ -112,6 +112,12 @@
         "state": {
           "off": "mdi:alert-circle"
         }
+      },
+      "safety": {
+        "default": "mdi:alert-circle",
+        "state": {
+          "off": "check-circle"
+        }
       }
     },
     "switch": {

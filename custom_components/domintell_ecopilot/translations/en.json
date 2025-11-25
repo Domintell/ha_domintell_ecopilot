@@ -197,7 +197,11 @@
         "name": "Overheat"
       },
       "safety": {
-        "name": "Safety"
+        "name": "Safety",
+        "state": {
+          "on": "Active",
+          "off": "Inactive"
+        }
       }
     },
     "sensor": {

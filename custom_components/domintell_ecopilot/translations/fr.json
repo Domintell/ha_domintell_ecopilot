@@ -197,7 +197,11 @@
         "name": "Surchauffe"
       },
       "safety": {
-        "name": "Sécurité"
+        "name": "Sécurité",
+        "state": {
+          "on": "Active",
+          "off": "Inactive"
+        }
       }
     },
     "sensor": {
