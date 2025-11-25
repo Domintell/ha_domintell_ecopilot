@@ -76,6 +76,17 @@ BINARY_SENSORS: Final[tuple[EcoPilotBinarySensorEntityDescription, ...]] = (
         value_fn=lambda data: data.system.temperature_probe,
     ),
     EcoPilotBinarySensorEntityDescription(
+        key="temperature_internal",
+        translation_key="temperature_internal",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        has_fn=(
+            lambda data: data.system is not None
+            and data.system.temperature_internal is not None
+        ),
+        value_fn=lambda data: data.system.temperature_internal,
+    ),
+    EcoPilotBinarySensorEntityDescription(
         key="bad_load",
         translation_key="bad_load",
         device_class=BinarySensorDeviceClass.PROBLEM,
@@ -94,6 +105,16 @@ BINARY_SENSORS: Final[tuple[EcoPilotBinarySensorEntityDescription, ...]] = (
             lambda data: data.system is not None and data.system.overheat is not None
         ),
         value_fn=lambda data: data.system.overheat,
+    ),
+    EcoPilotBinarySensorEntityDescription(
+        key="safety",
+        translation_key="safety",
+        device_class=BinarySensorDeviceClass.SAFETY,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        has_fn=(
+            lambda data: data.system is not None and data.system.safety is not None
+        ),
+        value_fn=lambda data: data.system.safety,
     ),
 )
 

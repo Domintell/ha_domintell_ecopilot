@@ -181,13 +181,23 @@
         }
       },
       "temperature_probe": {
-        "name": "Sonde température"
+        "name": "Sonde temp. externe"
+      },
+      "temperature_internal": {
+        "name": "Sonde temp. interne",
+        "state": {
+          "on": "OK",
+          "off": "Problem"
+        }
       },
       "bad_load": {
         "name": "Charge"
       },
       "overheat": {
         "name": "Surchauffe"
+      },
+      "safety": {
+        "name": "Sécurité"
       }
     },
     "sensor": {

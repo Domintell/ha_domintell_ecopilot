@@ -651,8 +651,10 @@ class System(BaseModel):
     p1_data: bool | None = field(default=None)
     mcu_status: bool | None = field(default=None)
     temperature_probe: bool | None = field(default=None)
+    temperature_internal: bool | None = field(default=None)
     bad_load: bool | None = field(default=None)
     overheat: bool | None = field(default=None)
+    safety: bool | None = field(default=None)
 
 
 @dataclass(kw_only=True)

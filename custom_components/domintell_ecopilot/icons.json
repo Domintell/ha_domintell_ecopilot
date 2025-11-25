@@ -106,6 +106,12 @@
         "state": {
           "off": "mdi:alert-circle"
         }
+      },
+      "temperature_internal": {
+        "default": "mdi:check-circle",
+        "state": {
+          "off": "mdi:alert-circle"
+        }
       }
     },
     "switch": {

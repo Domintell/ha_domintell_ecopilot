@@ -183,11 +183,21 @@
       "temperature_probe": {
         "name": "Temp. probe"
       },
+      "temperature_internal": {
+        "name": "Temp. internal",
+        "state": {
+          "on": "OK",
+          "off": "Problem"
+        }
+      },
       "bad_load": {
         "name": "Load"
       },
       "overheat": {
         "name": "Overheat"
+      },
+      "safety": {
+        "name": "Safety"
       }
     },
     "sensor": {
