@@ -1151,6 +1151,7 @@ class EcoPilotSensorEntity(EcoPilotEntity, SensorEntity):
         """Initialize Sensor Domain."""
         super().__init__(coordinator)
         self.entity_description = description
+        self.coordinator = coordinator
         self._attr_unique_id = f"{coordinator.config_entry.unique_id}_{description.key}"
         if not description.enabled_fn(self.coordinator.data):
             self._attr_entity_registry_enabled_default = False
@@ -1164,7 +1165,17 @@ class EcoPilotSensorEntity(EcoPilotEntity, SensorEntity):
     @property
     def native_value(self) -> StateType | datetime | None:
         """Return the sensor value."""
-        return self.entity_description.value_fn(self.coordinator.data)
+        value = self.entity_description.value_fn(self.coordinator.data)
+
+        # Take precautions if the tankSense has not yet received valid data.
+        if self.coordinator.data.device.product_model == "tankSense":
+            if (
+                self.coordinator.data.measurement.srssi == 0
+                and self.coordinator.data.measurement.src == 0
+            ):
+                return None
+
+        return value
 
     @property
     def available(self) -> bool:
