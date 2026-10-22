@@ -17,7 +17,6 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.const import (
-    ATTR_VIA_DEVICE,
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS,
     EntityCategory,
@@ -31,6 +30,8 @@ from homeassistant.const import (
     UnitOfTemperature,
     UnitOfLength,
 )
+from homeassistant.const import __version__ as HA_VERSION
+from packaging.version import Version
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.device_registry import DeviceInfo
@@ -1210,10 +1211,15 @@ class EcoPilotP1SensorEntity(EcoPilotEntity, SensorEntity):
         )
 
         device_identifier = f"{coordinator.data.device.product_model}_{coordinator.data.device.serial_number}"
-        self._attr_device_info[ATTR_VIA_DEVICE] = (
-            DOMAIN,
-            device_identifier,
-        )
+
+        if Version(HA_VERSION) >= Version("2026.8.0"):
+            self._attr_device_info["via_device_id"] = device_identifier
+        else:
+            # Support for older versions of HA (< 2026.8.0)
+            self._attr_device_info["via_device"] = (
+                DOMAIN,
+                device_identifier,
+            )
 
     @property
     def native_value(self) -> StateType | datetime | None:
