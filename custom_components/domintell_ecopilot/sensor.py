@@ -34,6 +34,7 @@ from homeassistant.const import __version__ as HA_VERSION
 from packaging.version import Version
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import StateType
@@ -1213,7 +1214,12 @@ class EcoPilotP1SensorEntity(EcoPilotEntity, SensorEntity):
         device_identifier = f"{coordinator.data.device.product_model}_{coordinator.data.device.serial_number}"
 
         if Version(HA_VERSION) >= Version("2026.8.0"):
-            self._attr_device_info["via_device_id"] = device_identifier
+            dev_reg = dr.async_get(self.hass)
+            parent_device = dev_reg.async_get_device_by_identifier(
+                identifier=(DOMAIN, device_identifier)
+            )
+            if parent_device:
+                self._attr_device_info["via_device_id"] = parent_device.id
         else:
             # Support for older versions of HA (< 2026.8.0)
             self._attr_device_info["via_device"] = (
