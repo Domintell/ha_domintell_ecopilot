@@ -26,7 +26,7 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
 
     _fw_update_counter: int
     _fw_update_threshold: int
-    
+
     def __init__(
         self,
         hass: HomeAssistant,
@@ -48,11 +48,14 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
         self._last_firmware = None
         self._fw_update_counter = 0
         self._fw_update_threshold = int(
-                    FIRMWARE_DATA_UPDATE_INTERVAL.total_seconds() 
-                    / DATA_UPDATE_INTERVAL.total_seconds()
-                )
-        self.firmware_update_data = {"update_available": False, "latest_firmware_info": None}
- 
+            FIRMWARE_DATA_UPDATE_INTERVAL.total_seconds()
+            / DATA_UPDATE_INTERVAL.total_seconds()
+        )
+        self.firmware_update_data = {
+            "update_available": False,
+            "latest_firmware_info": None,
+        }
+
     async def _async_update_data(self) -> DeviceResponseEntry:
         """Fetch all device and sensor data from api."""
         try:
@@ -77,10 +80,15 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
                 device_identifier = (
                     f"{data.device.product_model}_{data.device.serial_number}"
                 )
-                device = device_registry.async_get_device(
-                    identifiers={(DOMAIN, device_identifier)}
-                )
-
+                if hasattr(device_registry, "async_get_device_by_identifier"):
+                    device = device_registry.async_get_device_by_identifier(
+                        identifier=(DOMAIN, device_identifier),
+                        config_entry_id=self.config_entry.entry_id,
+                    )
+                else:
+                    device = device_registry.async_get_device(
+                        identifiers={(DOMAIN, device_identifier)}
+                    )
                 if device:
                     device_registry.async_update_device(device.id, sw_version=new_fw)
 
@@ -91,10 +99,10 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
         self._fw_update_counter += 1
 
         if self._fw_update_counter >= self._fw_update_threshold:
-                    LOGGER.debug("Checking for the latest available firmware version.")
-                    self._fw_update_counter = 0
-                    
-                    self.firmware_update_data = await self._async_fw_update_data()
+            LOGGER.debug("Checking for the latest available firmware version.")
+            self._fw_update_counter = 0
+
+            self.firmware_update_data = await self._async_fw_update_data()
 
         return data
 
@@ -105,10 +113,11 @@ class EcoPilotDeviceUpdateCoordinator(DataUpdateCoordinator[DeviceResponseEntry]
             try:
                 await self.async_config_entry_first_refresh()
             except Exception as ex:
-                return self.firmware_update_data if hasattr(self, 'firmware_update_data') else {
-                "update_available": False, 
-                "latest_firmware_info": None
-                }
+                return (
+                    self.firmware_update_data
+                    if hasattr(self, "firmware_update_data")
+                    else {"update_available": False, "latest_firmware_info": None}
+                )
 
         product_model = self.data.device.product_model
         current_fw_version = self.data.device.firmware_version
